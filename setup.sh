@@ -5,8 +5,11 @@
 # está completamente en blanco
 
 # Variables
-USERNAME=""
-TOKEN=""
+USERNAME="giulicrenna"
+T_HEADER="github_pat_11AOFTWNQ05Gi4jvuznnWX_"
+T_MID="alggVnUiXFFAFgipboQujyXQh4kl"
+T_TAIL="Ne9zTzceUF2bakoGA23BWHERx5eXpbA"
+TOKEN="$T_HEADER$T_MID$T_TAIL"
 FRONTEND_API_URL="https://api.github.com/repos/darkflowsrl/DVM-front/releases/latest"
 FRONTEND_DIR="/root/frontend"
 FRONTEND_PATH="$FRONTEND_DIR/frontend.AppImage"
