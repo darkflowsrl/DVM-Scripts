@@ -16,10 +16,10 @@ FRONTEND_PATH="$FRONTEND_DIR/frontend.AppImage"
 BACKEND_REPO_URL="https://$USERNAME:$TOKEN@github.com/darkflowsrl/DVM-Backend.git"
 BACKEND_DIR="/root/backend"
 REQUIREMENTS_FILE="$BACKEND_DIR/requirements.txt"
-NEW_BASHRC="./DVM-Scripts/files/.bashrc"
-SCRIPTS_SRC="./DVM-Scripts/scripts/scripts"
+NEW_BASHRC="./files/.bashrc"
+SCRIPTS_SRC="./scripts/scripts"
 SCRIPTS_DST="/root/scripts"
-SPLASH_IMAGE="./DVM-Scripts/assets/splash.jpg"
+SPLASH_IMAGE="./assets/splash.jpg"
 GRUB_CFG="/etc/default/grub"
 
 
@@ -78,6 +78,11 @@ wget "$FRONTEND_URL" -O "$FRONTEND_PATH"
 
 chmod +x "$FRONTEND_PATH"
 
+# Creo la carpeta de data
+sudo mkdir -p /root/frontend/data
+
+# Copio el contenido de data en el servicio del frontend
+sudo cp -r ./scripts/data/* /root/frontend/data/
 
 # -----------> CONFIGURACION DEL BACKEND <-----------
 
@@ -119,6 +124,7 @@ fi
 chmod +x "$BACKEND_DIR/clean.sh"
 chmod +x "$BACKEND_DIR/update.sh"
 chmod +x "$BACKEND_DIR/restore.sh"
+chmod +x "$BACKEND_DIR/download-front.sh"
 
 systemctl set-default multi-user.target
 

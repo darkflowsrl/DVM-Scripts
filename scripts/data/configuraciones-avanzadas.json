@@ -1,0 +1,9 @@
+{
+  "ancho": 12,
+  "gota": { "fina": 2000, "media": 2400, "gruesa": 2800, "custom": 3000, "seleccionada": "FINA" },
+  "variacionRPM": 10,
+  "corriente": { "maximo": 3, "minimo": 1, "limite": 4 },
+  "sensorRPM": false,
+  "electroValvula": false,
+  "password": "pass123"
+}
