@@ -37,15 +37,15 @@ if [ "$ASSET_ID" = "null" ]; then
   exit 1
 fi
 
-m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: application/octet-stream' https://$TOKEN:@$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > /root/$FILE 2>&1)
+m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: application/octet-stream' https://$TOKEN:@$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > /root/frontend/$FILE 2>&1)
 #m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: application/octet-stream' https://$TOKEN:@$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > $FILE 2>&1)
 if [ $? -ne 0 ] ; then
   echo "Error: ""$m"
   exit 1  
 fi
 
-chmod +x "/root/$FILE"
-#chmod +x "$FILE"
+chmod +x "/root/frontend/$FILE"
+
 if [ $? -ne 0 ]; then
   echo "Error al asignar permisos de ejecución al archivo AppImage"
   exit 1
@@ -60,7 +60,7 @@ fi
 
 ASSET_ID=`gh_curl https://$GITHUB_API_ENDPOINT/repos/$REPO/releases | jq "$PARSER"`
 if [ "$ASSET_ID" != "null" ]; then
-  m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: application/octet-stream' https://$TOKEN:@$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > /root/data.rar 2>&1)
+  m=$(curl -sL --header "Authorization: token $TOKEN" --header 'Accept: application/octet-stream' https://$TOKEN:@$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > /root/frontend/data.rar 2>&1)
   if [ $? -ne 0 ] ; then
     echo "Error: ""$m"
     exit 1
@@ -70,11 +70,11 @@ if [ "$ASSET_ID" != "null" ]; then
   # mkdir -p "$BACKUP_FILES_CONFIG_DIR" 
   # cp -r /root/dvm-app-front/* "$BACKUP_FILES_CONFIG_DIR" 
   
-  mkdir -p "/root/dvm-app-front"
-  #mkdir -p "dvm-app-front"
-  unrar x -y -r /root/data.rar /root/dvm-app-front
+  # mkdir -p "/root/dvm-app-front"
+  # mkdir -p "dvm-app-front"
+  unrar x -y -r /root/frontend/data.rar /root/frontend
   #unrar x -y -r data.rar dvm-app-front
-  chmod -R 777 "/root/dvm-app-front"
+  chmod -R 777 "/root/frontend"
   #chmod -R 777 "dvm-app-front"
   echo "Agregando archivos de configuración"
 fi

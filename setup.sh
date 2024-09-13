@@ -17,27 +17,25 @@ BACKEND_REPO_URL="https://$USERNAME:$TOKEN@github.com/darkflowsrl/DVM-Backend.gi
 BACKEND_DIR="/root/backend"
 REQUIREMENTS_FILE="$BACKEND_DIR/requirements.txt"
 NEW_BASHRC="./files/.bashrc"
-SCRIPTS_SRC="./scripts/scripts"
+SCRIPTS_SRC="./scripts"
 SCRIPTS_DST="/root/scripts"
 SPLASH_IMAGE="./assets/splash.jpg"
 GRUB_CFG="/etc/default/grub"
-
+SERVICE_FILE="/etc/systemd/system/getty.target.wants/getty@tty1.service"
 
 # -----------> INSTALACION DE PAQUETES <-----------
 timedatectl set-ntp true
 
-#apt -y update
-#apt -y upgrade
 #apt install -y software-properties-common
+apt -y update
+apt -y upgrade
 apt install -y python3-pip --fix-missing
 apt install -y htop
 apt install -y nodm
 apt install -y git
+apt install -y curl --fix-missing
 
 # -----------> CONFIGURACION DEL AUTOLOGIN <-----------
-
-# Define la ruta al archivo de unidad de systemd para el servicio getty en la terminal tty1
-SERVICE_FILE="/etc/systemd/system/getty.target.wants/getty@tty1.service"
 
 # Define una nueva línea para el parámetro ExecStart en el archivo de unidad
 # - ExecStart especifica el comando a ejecutar para iniciar el servicio.
@@ -47,7 +45,7 @@ SERVICE_FILE="/etc/systemd/system/getty.target.wants/getty@tty1.service"
 # - --noclear evita que se limpie la pantalla al iniciar sesión.
 # - %I es un placeholder que se reemplaza con el identificador de la instancia de getty (por ejemplo, tty1).
 # - $TERM pasa la variable de tipo de terminal al comando.
-NEW_EXECSTART="ExecStart=-/sbin/agetty --noissue --autologin root --noclear %I $TERM"
+cp ./files/getty@tty1.service $SERVICE_FILE
 
 # ORIGINAL (BAK): -/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
 
@@ -67,22 +65,22 @@ sed -i "s|^ExecStart=.*|$NEW_EXECSTART|" "$SERVICE_FILE"
 
 # Descargar la versión latest del frontend y guardarla en /root/frontend/frontend.AppImage
 VERSION=$(curl -s -u "$USERNAME:$TOKEN" "$FRONTEND_API_URL" | grep 'tag_name' | sed 's/.*"tag_name": "\(.*\)",/\1/')
-FRONTEND_URL="https://github.com/darkflowsrl/DVM-front/releases/download/$VERSION/dvm-app-front-$VERSION.AppImage"
+FRONTEND_URL="https://github.com/darkflowsrl/DVM-front/releases/download/$VERSION/dvm-app-front.AppImage"
 
 # Descargar la última versión del frontend
 echo "Descargando la última versión del frontend ($VERSION)..."
 
 mkdir -p "$FRONTEND_DIR"
 
-wget "$FRONTEND_URL" -O "$FRONTEND_PATH"
+curl -L -u "$USERNAME:$TOKEN" "$FRONTEND_URL" -o "$FRONTEND_PATH"
 
 chmod +x "$FRONTEND_PATH"
 
 # Creo la carpeta de data
-sudo mkdir -p /root/frontend/data
+mkdir -p /root/frontend/data
 
 # Copio el contenido de data en el servicio del frontend
-sudo cp -r ./scripts/data/* /root/frontend/data/
+cp -r ./scripts/data/* /root/frontend/data/
 
 # -----------> CONFIGURACION DEL BACKEND <-----------
 
@@ -121,10 +119,10 @@ fi
 
 # -----------> CONFIGURACION DE PERMISOS <-----------
 # Le doy permisos a todos los archivos
-chmod +x "$BACKEND_DIR/clean.sh"
-chmod +x "$BACKEND_DIR/update.sh"
-chmod +x "$BACKEND_DIR/restore.sh"
-chmod +x "$BACKEND_DIR/download-front.sh"
+chmod +x "$SCRIPTS_DST/clean.sh"
+chmod +x "$SCRIPTS_DST/update.sh"
+chmod +x "$SCRIPTS_DST/restore.sh"
+chmod +x "$SCRIPTS_DST/download-front.sh"
 
 systemctl set-default multi-user.target
 
