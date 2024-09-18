@@ -45,7 +45,7 @@ apt install -y curl --fix-missing
 # - --noclear evita que se limpie la pantalla al iniciar sesión.
 # - %I es un placeholder que se reemplaza con el identificador de la instancia de getty (por ejemplo, tty1).
 # - $TERM pasa la variable de tipo de terminal al comando.
-cp ./files/getty@tty1.service $SERVICE_FILE
+# BORRAR cp ./files/getty@tty1.service $SERVICE_FILE
 
 # ORIGINAL (BAK): -/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
 
@@ -59,7 +59,7 @@ cp "$SERVICE_FILE" "$SERVICE_FILE.bak"
 #   - ^ExecStart=.* busca una línea que comience con "ExecStart=" seguido de cualquier cosa (.*).
 #   - $NEW_EXECSTART es el nuevo valor que reemplazará a la línea que coincide con la expresión de búsqueda.
 # - "$SERVICE_FILE" es la ruta del archivo de unidad que se está editando.
-sed -i "s|^ExecStart=.*|$NEW_EXECSTART|" "$SERVICE_FILE"
+# BORRAR  sed -i "s|^ExecStart=.*|$NEW_EXECSTART|" "$SERVICE_FILE"
 
 # -----------> CONFIGURACION DEL FRONTEND <-----------
 
