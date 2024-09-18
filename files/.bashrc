@@ -28,7 +28,7 @@ do
 done
 
 # Limpio los backups
-/root/scripts/clean.sh > /dev/null 2>1&
+# /root/scripts/clean.sh > /dev/null 2>1&
 
 # Inicializo el backend
 nohup python3 /root/backend/main.py > /dev/null 2>1&
