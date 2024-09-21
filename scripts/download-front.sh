@@ -1,4 +1,4 @@
-#!/usr/bin/csh
+#!/bin/bash
 
 if [ $# -lt 1 ] ;then
     echo "Usage: <version or 'latest'>"
