@@ -8,9 +8,6 @@ fi
 VERSION_FRONT=$1
 VERSION_BACK=$2
 
-TOKEN=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
-REPO=darkflowsrl/DVM-front
-
 nmcli dev wifi connect "dvm" password "dvm12345"
 if [ $? -ne 0 ]; then
   echo "Error al conectar a la red Wi-Fi"
@@ -27,7 +24,7 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-source download-front.sh $TOKEN $REPO frontend.AppImage $VERSION_FRONT
+source /root/DVM-Scripts/scripts/download-front.sh $VERSION_FRONT
 
 cd /root/backend || exit 1
 
@@ -38,4 +35,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# reboot
+reboot
