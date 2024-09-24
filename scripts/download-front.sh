@@ -1,15 +1,15 @@
 #!/usr/bin/csh
 
-if [ $# -lt 4 ] ;then
-    echo "Usage: <github token> <org/repo> <filename> <version or 'latest'>"
+if [ $# -lt 1 ] ;then
+    echo "Usage: <version or 'latest'>"
     exit 1
 fi
 
-TOKEN="$1"
-REPO="$2"
-FILE="$3"      # the name of your release asset file, e.g. build.tar.gz
-VERSION="$4"                       # tag name or the word "latest"
+VERSION="$1" # tag name or the word "latest"
+REPO=darkflowsrl/DVM-front
+FILE=frontend.AppImage
 GITHUB_API_ENDPOINT="api.github.com"
+
 USER="giulicrenna"
 alias errcho='>&2 echo'
 
@@ -34,7 +34,9 @@ if [ "$ASSET_ID" = "null" ]; then
   exit 1
 fi
 
+
 m=$(curl -sL --header 'Accept: application/octet-stream' -u $USER:$TOKEN https://$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > /root/frontend/$FILE.temp 2>&1)
+
 if [ $? -ne 0 ] ; then
   echo "Error: ""$m"
   exit 1
@@ -60,7 +62,9 @@ fi
 
 ASSET_ID=`gh_curl https://$GITHUB_API_ENDPOINT/repos/$REPO/releases | jq "$PARSER"`
 if [ "$ASSET_ID" != "null" ]; then
+
   m=$(curl -sL --header 'Accept: application/octet-stream' -u $USER:$TOKEN https://$GITHUB_API_ENDPOINT/repos/$REPO/releases/assets/$ASSET_ID > /root/data.rar 2>&1)
+
   if [ $? -ne 0 ] ; then
     echo "Error: ""$m"
     exit 1
@@ -72,3 +76,4 @@ if [ "$ASSET_ID" != "null" ]; then
   chmod -R 777 "/root/frontend"
   echo "Agregando archivos de configuración"
 fi
+
