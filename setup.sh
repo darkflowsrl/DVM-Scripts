@@ -58,7 +58,7 @@ cp "$SERVICE_FILE" "$SERVICE_FILE.bak"
 #   - ^ExecStart=.* busca una línea que comience con "ExecStart=" seguido de cualquier cosa (.*).
 #   - $NEW_EXECSTART es el nuevo valor que reemplazará a la línea que coincide con la expresión de búsqueda.
 # - "$SERVICE_FILE" es la ruta del archivo de unidad que se está editando.
-sed -i "s|^ExecStart=.*|$NEW_EXECSTART|" "$SERVICE_FILE"
+# sed -i "s|^ExecStart=.*|$NEW_EXECSTART|" "$SERVICE_FILE"
 
 # -----------> CONFIGURACION DEL FRONTEND <-----------
 
