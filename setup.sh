@@ -49,7 +49,7 @@ NEW_EXECSTART="ExecStart=-/sbin/agetty --noissue --autologin root --noclear %I $
 # ORIGINAL (BAK): -/sbin/agetty -o '-p -- \\u' --noclear %I $TERM
 
 # Backup del servicio
-cp "$SERVICE_FILE" "$SERVICE_FILE.bak"
+# cp "$SERVICE_FILE" "$SERVICE_FILE.bak"
 
 # Usa el comando sed para editar el archivo de unidad de systemd en línea
 # - -i indica que se debe editar el archivo en el lugar (in-place).
@@ -126,5 +126,5 @@ chmod +x "$SCRIPTS_DST/download-front.sh"
 
 systemctl set-default multi-user.target
 
-systemctl enable getty@tty1.servie
+systemctl enable getty@tty1.service
 
