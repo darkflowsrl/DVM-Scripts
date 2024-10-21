@@ -8,7 +8,10 @@ fi
 VERSION_FRONT=$1
 VERSION_BACK=$2
 
+nmcli dev wifi
+
 nmcli dev wifi connect "dvm" password "dvm12345"
+
 if [ $? -ne 0 ]; then
   echo "Error al conectar a la red Wi-Fi"
   exit 1
