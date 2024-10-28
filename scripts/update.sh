@@ -1,5 +1,7 @@
 #!/bin/bash
 
+nmcli dev wifi rescan
+
 if [ "$#" -ne 2 ]; then
     echo "Uso: $0 <version_front> <version_back>"
     exit 1
@@ -7,8 +9,6 @@ fi
 
 VERSION_FRONT=$1
 VERSION_BACK=$2
-
-nmcli dev wifi
 
 nmcli dev wifi connect "dvm" password "dvm12345"
 
