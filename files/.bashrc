@@ -34,4 +34,4 @@ done
 nohup python3 /root/backend/main.py > /dev/null 2>1&
 
 # Inicializo el frontend en modo kisoko
-startx /root/frontend/frontend.AppImage --no-sandbox -- -nocursor
+sudo startx /root/frontend/frontend.AppImage --no-sandbox -- -nocursor
