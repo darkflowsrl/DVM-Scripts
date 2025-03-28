@@ -33,5 +33,6 @@ done
 # Inicializo el backend
 nohup python3 /root/backend/main.py > /dev/null 2>1&
 
-# Inicializo el frontend en modo kisoko
+# Inicializo el frontend en modo kiosko
+chmod 777 -R /frontend/data 
 sudo startx /root/frontend/frontend.AppImage --no-sandbox -- -nocursor
