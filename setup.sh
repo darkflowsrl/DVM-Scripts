@@ -30,6 +30,7 @@ apt install -y git
 apt install -y unrar
 apt install -y curl
 apt install -y jq
+apt install -y nano
 
 # -----------> CONFIGURACION DEL AUTOLOGIN <-----------
 
