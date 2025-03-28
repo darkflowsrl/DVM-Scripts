@@ -1,55 +1,144 @@
-### Documentación de instalación
-## DVM
+# 🛠️ Instalación de DVM en Tablet SMART EMBEDDED
+
+Este instructivo detalla cómo instalar y configurar el sistema DVM en una tablet SMART EMBEDDED desde cero.
+
 ---
 
-### **Requisitos previos**
-Antes de comenzar, asegúrate de tener acceso a la tablet con un sistema operativo basado en Linux y los privilegios de root habilitados. Además, la tablet debe estar conectada a Internet mediante Wi-Fi o Ethernet.
+## 📥 Paso 1: Descargar archivos necesarios
 
-### **Pasos de instalación**
+1. Descargar `data.rar` desde la **última versión** del repositorio:
+   👉 [https://github.com/darkflowsrl/DVM-front/releases](https://github.com/darkflowsrl/DVM-front/releases)
 
-#### **Paso 1: Conectar la tablet a Internet**
-1. Usa la interfaz gráfica del sistema operativo instalado en la tablet para conectarte a una red Wi-Fi.
-2. Como alternativa, puedes conectar la tablet mediante un cable Ethernet.
+2. Descargar el repositorio de scripts desde:
+   👉 [https://github.com/darkflowsrl/DVM-Scripts/tree/main](https://github.com/darkflowsrl/DVM-Scripts/tree/main)
 
-#### **Paso 2: Clonar el repositorio de scripts**
+3. Descomprimir ambos archivos y guardar las carpetas resultantes en un **pendrive USB**.
 
-Usa el siguiente comando para clonar el repositorio de scripts en el directorio `/root` de la tablet:
+---
+
+## 🔌 Paso 2: Preparar la tablet
+
+4. Conectar la tablet a la **corriente eléctrica**.
+
+5. Conectar el **USB-C** de la tablet a una PC.
+
+6. Usar un **pin** para presionar el botón del **bootloader**. Mientras lo mantenés presionado, **encender la tablet**.  
+   La **luz LED debe parpadear de rojo a verde**.
+
+7. Ejecutar el archivo `run.bat` desde la PC.  
+   Esto iniciará el proceso de instalación del sistema operativo.
+
+   > Durante la instalación, en la pantalla de la tablet debe aparecer el logo de **SMART EMBEDDED**.
+
+   Al finalizar, el script debe mostrar el mensaje:
+   ```
+   Success  1 FBK: DONE
+   ```
+
+8. Desconectar la tablet del cable USB-C.
+
+9. Reiniciar la tablet.
+
+---
+
+## 📁 Paso 3: Copiar archivos a la tablet
+
+10. Insertar el **pendrive** en la tablet.
+
+11. Copiar las carpetas descomprimidas (`data` y `DVM-Scripts-main`) al directorio `/root`.
+
+---
+
+## 🌐 Paso 4: Conectarse a WiFi
+
+12. Conectar la tablet a una red WiFi.
+
+   > ⚠️ En algunas versiones de la tablet, el botón para conectarse está **invisible a la izquierda** del botón de Bluetooth.
+
+---
+
+## 💻 Paso 5: Configuración del sistema
+
+13. Abrir una **terminal** y ejecutar:
+
 ```bash
-git clone https://github.com/darkflowsrl/DVM-Scripts.git /root/DVM-Scripts
+setxkbmap es
 ```
-Si `git` no está instalado, usa este comando para instalarlo:
-```bash
-apt-get install -y git
-```
-Como alternativa, si no puedes usar `git`, puedes copiar la carpeta `DVM-Scripts` desde un pendrive al directorio `/root` utilizando el gestor de archivos del sistema.
 
-#### **Paso 3: Otorgar permisos de ejecución**
+14. Navegar a la carpeta del repositorio:
 
-Una vez clonado o copiado el repositorio, otorga permisos de ejecución a todos los scripts dentro de la carpeta con el siguiente comando:
 ```bash
-chmod +x -R /root/DVM-Scripts
+cd DVM-Scripts-main
 ```
 
-#### **Paso 4: Ejecutar el script de instalación**
+15. Dar permisos de ejecución al script:
 
-Para comenzar la instalación del software y las dependencias, navega a la carpeta `DVM-Scripts` y ejecuta el archivo `setup.sh`:
 ```bash
-cd /root/DVM-Scripts
+chmod +x setup.sh
+```
+
+16. Ejecutar el script de instalación:
+
+```bash
 ./setup.sh
 ```
-Este script instalará el **backend**, **frontend** y otros componentes necesarios, junto con todas las dependencias requeridas.
 
-#### **Paso 5: Reiniciar la tablet**
+17. Cuando aparezca el mensaje **“Enable nodm?”**, seleccionar **Yes**.
 
-Una vez finalizada la instalación, reinicia la tablet para que los servicios empiecen a ejecutarse:
+---
+
+## 🧹 Paso 6: Reemplazo de datos y limpieza
+
+18. Moverse al directorio raíz:
+
+```bash
+cd /root
+```
+
+19. Copiar el contenido de la carpeta `data` a `frontend`:
+
+```bash
+cp -r data/ frontend/
+```
+
+20. Eliminar la carpeta `data` para liberar espacio:
+
+```bash
+rm -rf /root/data
+```
+
+> ⚠️ **Cuidado** con este comando, asegúrate de que estás en `/root` antes de ejecutarlo.
+
+---
+
+## ⚙️ Paso 7: Autologin al iniciar
+
+21. Editar el servicio `getty`:
+
+```bash
+nano /etc/systemd/system/getty.target.wants/getty@tty1.service
+```
+
+22. Dentro de la sección `[Service]`, modificar las líneas relacionadas con `ExecStart` como se indica:
+
+```ini
+[Service]
+# the VT is cleared by TTYVTDisallocate
+# The '-o' option value tells agetty to replace 'login' arguments with an
+# option to preserve environment (-p), followed by '--' for safety, and then
+# the entered username.
+ExecStart=
+ExecStart=-/sbin/agetty -a root --noclear %I $TERM
+```
+
+---
+
+## 🔁 Paso 8: Reiniciar y verificar
+
+23. Reiniciar la tablet:
+
 ```bash
 reboot
 ```
 
----
-
-### **Detalles adicionales**
-- **Autologin de root**: El script configura el autologin del usuario root en la terminal `tty1` para iniciar sesión automáticamente.
-- **Configuración del frontend y backend**: El script se encargará de descargar la última versión del frontend desde GitHub y configurará el backend, instalando las dependencias necesarias mediante `pip3`.
-- **Dependencias**: Se instalan herramientas adicionales como `htop`, `nodm`, `curl`, y `jq` para gestionar el sistema y la red.
-- **Modificaciones del kernel**: Se actualiza la configuración de GRUB para desactivar los logs del kernel durante el arranque y se agrega una imagen de splash personalizada.
+24. Verificar que el sistema DVM se haya instalado y se inicie correctamente.
