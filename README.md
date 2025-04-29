@@ -133,7 +133,28 @@ ExecStart=-/sbin/agetty -a root --noclear %I $TERM
 
 ---
 
-## 🔁 Paso 8: Reiniciar y verificar
+# Paso 8:  Desactivar apagado automático de pantalla.
+El modelo actual de tablet tiene una configuración que apaga de forma automática el display de la tablet.
+
+correr el siguiente comando:
+```bash
+sudo htop
+```
+
+Dentro de ahí deberás asesinar a todos los procesos que se llamen a `startx` y a `xinit`.
+
+Posteriormente deberás correr:
+```bash
+sudo startxfce4
+```
+
+Este comando levantará la interfaz gráfica del sistema operativo. Dentro de ahí deberás buscar en el menú:
+- Configuraciones.
+- Configuración de energía.
+- Habilitar configuración del display.
+- Reducir los tiempos de suspención a cero.
+
+## 🔁 Paso 9: Reiniciar y verificar
 
 23. Reiniciar la tablet:
 
